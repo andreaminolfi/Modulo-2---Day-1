@@ -83,7 +83,7 @@
   <!-- label + rate -->
   <span>{{ d.label }}</span>
   <span>({{ d.rate }})</span>
-  <span *ngFor="let in of counter(d.rate)">
+  <span *ngFor="let val of counter(d.rate)">
     <i class="fa fa-star"></i>
   </span>
   <span> - {{ d.memory / 1024 | number: '1.2-2' }} GB</span>
