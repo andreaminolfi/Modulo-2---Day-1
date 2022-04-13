@@ -1,0 +1,100 @@
+<form (submit)="save(f)" #f="ngForm">
+  <input
+    type="text"
+    [ngModel]="active?.label"
+    name="label"
+    required
+    class="form-control m-1"
+    placeholder="Phone model *"
+  />
+  <input
+    type="text"
+    [ngModel]="active?.price"
+    name="price"
+    required
+    class="form-control m-1"
+    placeholder="Price *"
+  />
+
+  <select [ngModel]="active?.os" name="os" required class="form-control m-1">
+    <option [value]="null">Select OS *</option>
+    <option value="ios">Ios</option>
+    <option value="android">Android</option>
+    <option value="windows">Windows</option>
+  </select>
+
+  <input
+    type="text"
+    [ngModel]="active?.memory"
+    name="memory"
+    required
+    class="form-control m-1"
+    placeholder="Memory *"
+  />
+
+  <span class="m-1">Rate:</span>
+  <div class="btn-group m-1">
+    <label class="btn btn-secondary" *ngFor="let val of [1, 2, 3, 4, 5]">
+      <input
+        type="radio"
+        required
+        name="rate"
+        [value]="val"
+        [ngModel]="active?.rate"
+      />
+      {{ val }}
+    </label>
+  </div>
+
+  <div class="btn-group btn-group-sm m-1">
+    <button class="btn btn-warning" type="submit" [disabled]="f.invalid">
+      {{ active?.id ? 'EDIT' : 'ADD' }}
+    </button>
+    <!-- NEW: ADD NEW DEVICE -->
+    <button
+      class="btn btn-light"
+      type="button"
+      *ngIf="active?.id"
+      (click)="active = null"
+    >
+      ADD NEW
+    </button>
+  </div>
+</form>
+
+<!--Devices List -->
+<div
+  class="list-group-item"
+  *ngFor="let d of devices"
+  [ngClass]="{ 'bg-warning': d.id === active?.id }"
+  (click)="setActiveHandler(d)"
+>
+  <!--os icon-->
+  <i
+    class="px-1 fa"
+    [ngClass]="{
+      'fa-android': d.os === 'android',
+      'fa-apple': d.os === 'ios',
+      'fa-windows': d.os === 'windows',
+      'fa-tablet': d.os === 'others'
+    }"
+  ></i>
+
+  <!-- label + rate -->
+  <span>{{ d.label }}</span>
+  <span>({{ d.rate }})</span>
+  <span *ngFor="let in of counter(d.rate)">
+    <i class="fa fa-star"></i>
+  </span>
+  <span> - {{ d.memory / 1024 | number: '1.2-2' }} GB</span>
+
+  <!-- price -->
+  <div class="pull-right">
+    <span [ngClass]="{ expensive: d.price > 700 }">
+      € {{ d.price | number: '1.2-2' }}
+    </span>
+
+    <!--trash icon-->
+    <i class="fa fa-trash icon" (click)="delete(d, $event)"></i>
+  </div>
+</div>
